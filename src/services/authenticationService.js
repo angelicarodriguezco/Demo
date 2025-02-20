@@ -23,4 +23,21 @@ const validateUser = async (email, password) => {
     return user;
 };
 
-module.exports = { validateUser };
+const register = async (username, email, password) => {
+    try {
+        const newEncryptedPassword = await bcrypt.hash(password, 10);
+        const user = new User({
+            username: username,
+            email: email,
+            password: newEncryptedPassword
+        });
+
+        const result = await user.save()
+        console.log('User was registered correctly');
+        return result;
+    } catch (error) {
+        console.error('Error registering user', error);
+    }
+}
+
+module.exports = { validateUser, register };
